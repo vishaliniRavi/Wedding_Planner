@@ -28,12 +28,14 @@ public class UserDao {
 		}
     	 
      }
-     public User validateUser(String email) {
-    	 String validateQuery="select * from User_register where email_id="+email;
+     public static User validateUser(String email,String password) {
+    	 String validateQuery="select * from User_register where email_id='"+email+ "'and password='"+password+"'";
     	 Connection con=ConnectionUtil.getDbConnection();
     	 try {
 			Statement stmt=con.createStatement();
 			ResultSet rs=stmt.executeQuery(validateQuery);
+			User user=new User(rs.getString(1),rs.getLong(2),rs.getString(3),rs.getString(4),rs.getString(5));
+			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

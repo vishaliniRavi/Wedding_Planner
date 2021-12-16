@@ -23,7 +23,7 @@ public class TestMain {
 			do {
 				System.out.println("Enter user name");
 				user_name = sc.nextLine();
-				if (user_name.matches("[A-Za-z]+")) {
+				if (user_name.matches("[A-Za-z]{3,}")) {
 					flag = 1;
 					break;
 				} else
@@ -94,17 +94,41 @@ public class TestMain {
 			User user = new User(user_name, mobile_no, city, email_id, password);
 			userDao.insertUser(user);
             break;
-		}
-//	case 2:
-//		userDao = new UserDao();
-//		System.out.println("User Login");
-//		System.out.println("Enter the registered email id");
-//		String email = sc.nextLine();
+		
+	case 2:
+		userDao = new UserDao();
+		do {
+			System.out.println("Enter email id");
+			email_id = sc.nextLine();
+			if (email_id.matches("[a-z]+[a-z0-9]+[@][a-z]+[.][a-z]+")) {
+				flag = 1;
+				break;
+			} else
+				flag = 0;
+			System.out.println("invalid email");
+		} while (flag == 0);
+		do {
+			System.out.println("Enter password");
+			password = sc.nextLine();
+			if (password.matches("[A-Z]+[a-z]+[@#$]+[0-9]+{8,20}")) {
+				flag = 1;
+				break;
+			} else
+				flag = 0;
+			System.out.println("invalid password");
+		} while (flag == 0);
+		
+	   User valideUser=UserDao.validateUser(email_id,password);
+	   if(valideUser!=null) {
+		   System.out.println("Welcome");
+	   }
+////		
 //		
+////		
 		
 	}
 }
-
+}
 		
 //			
 //			
