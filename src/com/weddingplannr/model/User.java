@@ -5,22 +5,22 @@ import java.util.Objects;
 
 
 public class User {
-	private String user_name;
-	private long mobile_no;
+	private String userName;
+	private long mobileNumber;
 	private String city;
-	private String email_id;
+	private String emailId;
 	private String password;
-	public String getUser_name() {
-		return user_name;
+	public String getUserName() {
+		return userName;
 	}
-	public void setUser_name(String user_name) {
-		this.user_name = user_name;
+	public void setUserName(String userName) {
+		this.userName = userName;
 	}
-	public long getMobile_no() {
-		return mobile_no;
+	public long getMobileNumber() {
+		return mobileNumber;
 	}
-	public void setMobile_no(long mobile_no) {
-		this.mobile_no = mobile_no;
+	public void setMobileNumber(long mobileNumber) {
+		this.mobileNumber = mobileNumber;
 	}
 	public String getCity() {
 		return city;
@@ -28,11 +28,11 @@ public class User {
 	public void setCity(String city) {
 		this.city = city;
 	}
-	public String getEmail_id() {
-		return email_id;
+	public String getEmailId() {
+		return emailId;
 	}
-	public void setEmail_id(String email_id) {
-		this.email_id = email_id;
+	public void setEmailId(String emailId) {
+		this.emailId = emailId;
 	}
 	public String getPassword() {
 		return password;
@@ -40,14 +40,12 @@ public class User {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-	
-	
-	public User(String user_name, long mobile_no, String city, String email_id, String password) {
+	public User(String userName, long mobileNumber, String city, String emailId, String password) {
 		super();
-		this.user_name = user_name;
-		this.mobile_no = mobile_no;
+		this.userName = userName;
+		this.mobileNumber = mobileNumber;
 		this.city = city;
-		this.email_id = email_id;
+		this.emailId = emailId;
 		this.password = password;
 	}
 	public User() {
@@ -56,7 +54,7 @@ public class User {
 	}
 	@Override
 	public int hashCode() {
-		return Objects.hash(city, email_id, mobile_no, password, user_name);
+		return Objects.hash(city, emailId, mobileNumber, password, userName);
 	}
 	@Override
 	public boolean equals(Object obj) {
@@ -67,16 +65,15 @@ public class User {
 		if (getClass() != obj.getClass())
 			return false;
 		User other = (User) obj;
-		return Objects.equals(city, other.city) && Objects.equals(email_id, other.email_id)
-				&& mobile_no == other.mobile_no && Objects.equals(password, other.password)
-				&& Objects.equals(user_name, other.user_name);
+		return Objects.equals(city, other.city) && Objects.equals(emailId, other.emailId)
+				&& mobileNumber == other.mobileNumber && Objects.equals(password, other.password)
+				&& Objects.equals(userName, other.userName);
 	}
 	@Override
 	public String toString() {
-		return "User [user_name=" + user_name + ", mobile_no=" + mobile_no + ", city=" + city + ", email_id=" + email_id
-				+ ", password=" + password + "]";
+		return "User [userName=" + userName + ", mobileNumber=" + mobileNumber + ", city=" + city + ", emailId="
+				+ emailId + ", password=" + password + "]";
 	}
-
 	
 	
 	

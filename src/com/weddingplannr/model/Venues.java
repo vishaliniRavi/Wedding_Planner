@@ -5,57 +5,65 @@ import java.util.Objects;
 
 
 public class Venues {
-	private String venue_name;
-	private String venue_area;
-	private String venue_type;
-	private String venue_vendor_name;
-	private long contact_number;
-	private double venue_package;
-	public String getVenue_name() {
-		return venue_name;
+	private String venueName;
+	private String venueAddress;
+	private String venueCity;
+	private String venueType;
+	private String venueVendorName;
+	private long contactNumber;
+	private double venuePackage;
+	public String getVenueName() {
+		return venueName;
 	}
-	public void setVenue_name(String venue_name) {
-		this.venue_name = venue_name;
+	public void setVenueName(String venueName) {
+		this.venueName = venueName;
 	}
-	public String getVenue_area() {
-		return venue_area;
+	public String getVenueAddress() {
+		return venueAddress;
 	}
-	public void setVenue_area(String venue_area) {
-		this.venue_area = venue_area;
+	public void setVenueAddress(String venueAddress) {
+		this.venueAddress = venueAddress;
 	}
-	public String getVenue_type() {
-		return venue_type;
+	public String getVenueCity() {
+		return venueCity;
 	}
-	public void setVenue_type(String venue_type) {
-		this.venue_type = venue_type;
+	public void setVenueCity(String venueCity) {
+		this.venueCity = venueCity;
 	}
-	public String getVenue_vendor_name() {
-		return venue_vendor_name;
+	public String getVenueType() {
+		return venueType;
 	}
-	public void setVenue_vendor_name(String venue_vendor_name) {
-		this.venue_vendor_name = venue_vendor_name;
+	public void setVenueType(String venueType) {
+		this.venueType = venueType;
 	}
-	public long getContact_number() {
-		return contact_number;
+	public String getVenueVendorName() {
+		return venueVendorName;
 	}
-	public void setContact_number(long contact_number) {
-		this.contact_number = contact_number;
+	public void setVenueVendorName(String venueVendorName) {
+		this.venueVendorName = venueVendorName;
 	}
-	public double getVenue_package() {
-		return venue_package;
+	public long getContactNumber() {
+		return contactNumber;
 	}
-	public void setVenue_package(double venue_package) {
-		this.venue_package = venue_package;
+	public void setContactNumber(long contactNumber) {
+		this.contactNumber = contactNumber;
 	}
-	public Venues(String venue_name, String venue_area, String venue_type, String venue_vendor_name,
-			long contact_number, double venue_package) {
+	public double getVenuePackage() {
+		return venuePackage;
+	}
+	public void setVenuePackage(double venuePackage) {
+		this.venuePackage = venuePackage;
+	}
+	public Venues(String venueName, String venueAddress, String venueCity, String venueType, String venueVendorName,
+			long contactNumber, double venuePackage) {
 		super();
-		this.venue_name = venue_name;
-		this.venue_area = venue_area;
-		this.venue_type = venue_type;
-		this.venue_vendor_name = venue_vendor_name;
-		this.contact_number = contact_number;
-		this.venue_package = venue_package;
+		this.venueName = venueName;
+		this.venueAddress = venueAddress;
+		this.venueCity = venueCity;
+		this.venueType = venueType;
+		this.venueVendorName = venueVendorName;
+		this.contactNumber = contactNumber;
+		this.venuePackage = venuePackage;
 	}
 	public Venues() {
 		super();
@@ -63,7 +71,8 @@ public class Venues {
 	}
 	@Override
 	public int hashCode() {
-		return Objects.hash(contact_number, venue_area, venue_name, venue_package, venue_type, venue_vendor_name);
+		return Objects.hash(contactNumber, venueAddress, venueCity, venueName, venuePackage, venueType,
+				venueVendorName);
 	}
 	@Override
 	public boolean equals(Object obj) {
@@ -74,17 +83,16 @@ public class Venues {
 		if (getClass() != obj.getClass())
 			return false;
 		Venues other = (Venues) obj;
-		return contact_number == other.contact_number && Objects.equals(venue_area, other.venue_area)
-				&& Objects.equals(venue_name, other.venue_name)
-				&& Double.doubleToLongBits(venue_package) == Double.doubleToLongBits(other.venue_package)
-				&& Objects.equals(venue_type, other.venue_type)
-				&& Objects.equals(venue_vendor_name, other.venue_vendor_name);
+		return contactNumber == other.contactNumber && Objects.equals(venueAddress, other.venueAddress)
+				&& Objects.equals(venueCity, other.venueCity) && Objects.equals(venueName, other.venueName)
+				&& Double.doubleToLongBits(venuePackage) == Double.doubleToLongBits(other.venuePackage)
+				&& Objects.equals(venueType, other.venueType) && Objects.equals(venueVendorName, other.venueVendorName);
 	}
 	@Override
 	public String toString() {
-		return "Venues [venue_name=" + venue_name + ", venue_area=" + venue_area + ", venue_type=" + venue_type
-				+ ", venue_vendor_name=" + venue_vendor_name + ", contact_number=" + contact_number + ", venue_package="
-				+ venue_package + "]";
+		return "Venues [venueName=" + venueName + ", venueAddress=" + venueAddress + ", venueCity=" + venueCity
+				+ ", venueType=" + venueType + ", venueVendorName=" + venueVendorName + ", contactNumber="
+				+ contactNumber + ", venuePackage=" + venuePackage + "]";
 	}
 	
 	
