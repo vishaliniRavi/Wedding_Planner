@@ -123,17 +123,70 @@ public class TestMain {
 			do {
 				User valideUser = userDao.validateUser(emailId, password);
 				User validadmin = userDao.validateAdmin(emailId, password);
-				if (validadmin != null) {
+				if (validadmin != null) {   //admin login
 					System.out.println("Welcome admin");
-					System.out.println("\n1.view customers \n2.add venues\nEnter your choice");
-                    int option=Integer.parseInt(sc.nextLine());
-                    switch(option) {
-                    case 1:
-                    	
-                    }
-				} else if (valideUser != null) {
+					System.out.println(
+							"\n1.view customers \n2.add venues\n3.Delete venue\n4.edit venue\n5.add services\n6.Remove services\nEnter your choice");
+					int option = Integer.parseInt(sc.nextLine());
+					switch (option) {
+					case 1:                       //view customer
+						UserDao userdao = new UserDao();
+						List<User> userList = userdao.viewUser();
+						for (int i = 0; i < userList.size(); i++) {
+							System.out.println(userList.get(i));
+						}
+						break;
+					case 2:                          //add venues
+						VenuesDao venuedao = new VenuesDao();
+						System.out.println("Enter venue name");
+						String venueName = sc.nextLine();
+						System.out.println("Enter venue Address");
+						String venueAddress = sc.nextLine();
+						System.out.println("Enter venue city");
+						String venueCity = sc.nextLine();
+						System.out.println("Enter venue type");
+						String venueType = sc.nextLine();
+						System.out.println("Enter venue vendor name");
+						String venueVendorName = sc.nextLine();
+						System.out.println("Enter Contact Number");
+						Long contactNumber = Long.parseLong(sc.nextLine());
+						System.out.println("Enter venue package");
+						Double venuePackage = Double.parseDouble(sc.nextLine());
+						Venues venue = new Venues(venueName, venueAddress, venueCity, venueType, venueVendorName,
+								contactNumber, venuePackage);
+						venuedao.insertVenue(venue);
+						break;
+					case 3:                   //delete venues
+						VenuesDao venueDao = new VenuesDao();
+						System.out.println("Enter venue name to delete");
+						venueName = sc.nextLine();
+						venueDao.removeVenue(venueName);
+						break;
+					case 4:                   //edit venues
+						venueDao = new VenuesDao();
+						System.out.println("Enter user name to edit");
+						venueName = sc.nextLine();
+						System.out.println("Enter venue vendor name");
+						venueVendorName = sc.nextLine();
+						System.out.println("Enter Contact Number");
+						contactNumber = Long.parseLong(sc.nextLine());
+						System.out.println("Enter venue package");
+						venuePackage = Double.parseDouble(sc.nextLine());
+						venueDao.updateVenue(venueVendorName, contactNumber, venuePackage, venueName);
+						break;
+					case 5:                 //add service
+						ServicesDao serviceDao = new ServicesDao();
+						System.out.println("Enter Service name");
+						String serviceName = sc.nextLine();
+						System.out.println("Enter Service package");
+						Double servicePackage = Double.parseDouble(sc.nextLine());
+						Services service = new Services(serviceName, servicePackage);
+						serviceDao.insertService(service);
+						break;
+					}
+				} else if (valideUser != null) {          //customer login
 					System.out.println("Welcome");
-					System.out.println("\n1.view venue\n2.view Services\n3.Edit profile");
+					System.out.println("\n1.view venue\n2.view Services\n3.Edit profile\n4.Find User Id");
 					flag = 1;
 					int userChoice = Integer.parseInt(sc.nextLine());
 					switch (userChoice) {
@@ -142,15 +195,15 @@ public class TestMain {
 						List<Venues> venuelist = venuedao.showVenue();
 						for (int i = 0; i < venuelist.size(); i++) {
 							System.out.println(venuelist.get(i));
-				    }
+						}
 						break;
 					case 2: // view services
 						ServicesDao serviceDao = new ServicesDao();
 						List<Services> serviceList = serviceDao.showServices();
 						for (int i = 0; i < serviceList.size(); i++) {
 							System.out.println(serviceList.get(i));
-							}
-						    break;
+						}
+						break;
 					case 3:// edit profile
 						userDao = new UserDao();
 						do {
@@ -215,6 +268,13 @@ public class TestMain {
 							userDao.updateUserProfile(user);
 						} else
 							System.out.println("invalid email");
+						break;
+					case 4:
+						userDao = new UserDao();
+						System.out.println("Enter email id : ");
+						emailId = sc.nextLine();
+						int id = UserDao.findUserId(emailId);
+						System.out.println("User Id : " + id);
 						break;
 					}
 				}

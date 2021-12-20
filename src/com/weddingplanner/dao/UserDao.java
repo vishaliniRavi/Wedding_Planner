@@ -5,7 +5,11 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
+
 import com.weddingplannr.model.User;
+import com.weddingplannr.model.Venues;
 
 
 
@@ -117,6 +121,41 @@ public class UserDao {
 	   	 return user;
 	}
 	
-	
-
+	 public List<User> viewUser(){
+		 List<User> userList=new ArrayList<User>();
+		 String showQuery="select * from user_details where user_role='customer'";
+		 Connection con=ConnectionUtil.getDbConnection();
+		 try {
+			Statement stmt=con.createStatement();
+			ResultSet rs=stmt.executeQuery(showQuery);
+			while(rs.next()) {
+				User user=new User(rs.getString(3),rs.getLong(4),rs.getString(5),rs.getString(6),rs.getString(7));
+				userList.add(user);
+				
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return userList;
+		
+	 
+	 }public static int findUserId(String emailId)
+		{
+			String findUser="select User_id from user_details where email_id='"+emailId+"'";
+			Connection con=ConnectionUtil.getDbConnection();
+			int UserId=0;
+			try {
+				Statement stmt = con.createStatement();
+				ResultSet rs=stmt.executeQuery(findUser);
+				if(rs.next())
+				{
+				UserId=rs.getInt(1);
+				}
+				
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			return UserId;
+	 
+}
 }
