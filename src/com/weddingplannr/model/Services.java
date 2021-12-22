@@ -44,7 +44,7 @@ public class Services {
 	}
 	@Override
 	public String toString() {
-		return "Services [serviceName=" + serviceName + ", servicePackage=" + servicePackage + "]";
+		return "serviceName:" + serviceName + "\nservicePackage:" + servicePackage + "";
 	}
 	
 	

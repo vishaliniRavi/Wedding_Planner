@@ -3,9 +3,11 @@ package com.weddingplanner.test;
 import java.util.List;
 import java.util.Scanner;
 
+import com.weddingplanner.dao.BookingVenuesDao;
 import com.weddingplanner.dao.ServicesDao;
 import com.weddingplanner.dao.UserDao;
 import com.weddingplanner.dao.VenuesDao;
+import com.weddingplannr.model.BookingVenues;
 import com.weddingplannr.model.Services;
 import com.weddingplannr.model.User;
 import com.weddingplannr.model.Venues;
@@ -123,20 +125,19 @@ public class TestMain {
 			do {
 				User valideUser = userDao.validateUser(emailId, password);
 				User validadmin = userDao.validateAdmin(emailId, password);
-				if (validadmin != null) {   //admin login
+				if (validadmin != null) { // admin login
 					System.out.println("Welcome admin");
-					System.out.println(
-							"\n1.view customers \n2.add venues\n3.Delete venue\n4.edit venue\n5.add services\n6.Remove services\nEnter your choice");
+					System.out.println("\n1.view customers \n2.add venues\n3.Delete venue\n4.edit venue\n5.add services\n6.Remove services\nEnter your choice");
 					int option = Integer.parseInt(sc.nextLine());
 					switch (option) {
-					case 1:                       //view customer
+					case 1: // view customer
 						UserDao userdao = new UserDao();
 						List<User> userList = userdao.viewUser();
 						for (int i = 0; i < userList.size(); i++) {
 							System.out.println(userList.get(i));
 						}
 						break;
-					case 2:                          //add venues
+					case 2: // add venues
 						VenuesDao venuedao = new VenuesDao();
 						System.out.println("Enter venue name");
 						String venueName = sc.nextLine();
@@ -156,13 +157,13 @@ public class TestMain {
 								contactNumber, venuePackage);
 						venuedao.insertVenue(venue);
 						break;
-					case 3:                   //delete venues
+					case 3: // delete venues
 						VenuesDao venueDao = new VenuesDao();
 						System.out.println("Enter venue name to delete");
 						venueName = sc.nextLine();
 						venueDao.removeVenue(venueName);
 						break;
-					case 4:                   //edit venues
+					case 4: // edit venues
 						venueDao = new VenuesDao();
 						System.out.println("Enter user name to edit");
 						venueName = sc.nextLine();
@@ -174,7 +175,7 @@ public class TestMain {
 						venuePackage = Double.parseDouble(sc.nextLine());
 						venueDao.updateVenue(venueVendorName, contactNumber, venuePackage, venueName);
 						break;
-					case 5:                 //add service
+					case 5: // add service
 						ServicesDao serviceDao = new ServicesDao();
 						System.out.println("Enter Service name");
 						String serviceName = sc.nextLine();
@@ -183,10 +184,15 @@ public class TestMain {
 						Services service = new Services(serviceName, servicePackage);
 						serviceDao.insertService(service);
 						break;
+					case 6:
+						serviceDao = new ServicesDao();
+						System.out.println("Enter service name to delete");
+						serviceName = sc.nextLine();
+						serviceDao.removeServices(serviceName);
 					}
-				} else if (valideUser != null) {          //customer login
-					System.out.println("Welcome");
-					System.out.println("\n1.view venue\n2.view Services\n3.Edit profile\n4.Find User Id");
+				} else if (valideUser != null) { // customer login
+					System.out.println("Welcome "+valideUser.getUserName());
+					System.out.println("\n1.view venue\n2.view Services\n3.Edit profile\n4.Book venues\n5.Book Services");
 					flag = 1;
 					int userChoice = Integer.parseInt(sc.nextLine());
 					switch (userChoice) {
@@ -270,22 +276,81 @@ public class TestMain {
 							System.out.println("invalid email");
 						break;
 					case 4:
-						userDao = new UserDao();
-						System.out.println("Enter email id : ");
-						emailId = sc.nextLine();
-						int id = UserDao.findUserId(emailId);
-						System.out.println("User Id : " + id);
-						break;
+					    venuedao=new VenuesDao();
+					    emailId=valideUser.getEmailId();
+						int id1=userDao.findUserId(emailId);
+						System.out.println("user"+id1);
+						System.out.println("view Produce List");
+						List<Venues> venueList = venuedao.showVenue();
+						for (int i = 0; i < venueList.size(); i++) {
+							System.out.println(venueList.get(i));
+						}
+						System.out.println("Enter venue name");
+						String venueName=sc.nextLine();
+						int id2=venuedao.findVenueId(venueName);
+						System.out.println("venue"+id2);
+						System.out.println("Enter No of guest");
+						int noOfGuest=Integer.parseInt(sc.nextLine());
+						System.out.println("Enter function Timing Morning/Evening");
+						String functionTiming=sc.nextLine();
+						System.out.println("Enter Event Date");
+						String eventDate=sc.nextLine();
+						int price=venuedao.findPackage(id2);
+						System.out.println("package"+price);
+						System.out.println("");
+//						System.out.println("Enter your Number of Products");
+//						int quantity=Integer.parseInt(scan.nextLine());
+//						
+//						double totalPrice=(double)(quantity*price);
+					     BookingVenues bookVenue=new BookingVenues(id1,id2,venueName,noOfGuest,functionTiming,eventDate,price);
+					     BookingVenuesDao bookingVenue=new BookingVenuesDao();
+						bookingVenue.bookVenue(bookVenue);
+						
+						
+						
+//					case 4:
+//						userDao = new UserDao();
+//						System.out.println("Enter email id : ");
+//						emailId = sc.nextLine();
+//					   int id = userDao.findUserId(emailId);
+//						System.out.println("User Id : " + id);
+//						break;
+//					case 5:
+//						venuedao = new VenuesDao();
+//						System.out.println("Enter venue Name : ");
+//						String venueName = sc.nextLine();
+//					   int venueId = venuedao.findVenueId(venueName);
+//						System.out.println("venue Id : " + venueId);
+//						break;
+//					case 5:
+//				     BookingVenuesDao bookVenue=new BookingVenuesDao();	
+//				     System.out.println("Enter venue Id");
+//				     int venueId=Integer.parseInt(sc.nextLine());
+//				     System.out.println("Enter venue name");
+//				     String venueName=sc.nextLine();
+//				     System.out.println("enter no of guest");
+//				     int noOfGuest=Integer.parseInt(sc.nextLine());
+//				     System.out.println("enter function timing morning or evening");
+//				     String functionTiming=sc.nextLine();
+//				     System.out.println("enter event date");
+//				     String eventDate=sc.nextLine();
+//				     System.out.println("Enter venue package");
+//				     double venuePackage=Double.parseDouble(sc.nextLine());
+//						int userId=0;
+//						BookingVenues bookvenue=new BookingVenues(userId,venueId,venueName,noOfGuest,functionTiming,eventDate,venuePackage);
+//				     bookVenue.bookVenue(bookvenue);
 					}
-				}
+					}
+				
 
 				else
 					System.out.println("invalid email and password");
 
 			} while (flag == 0);
 
-		}
+		
 
-	}
+			}
 
+		}	
 }

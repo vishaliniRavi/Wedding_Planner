@@ -36,13 +36,13 @@ public class VenuesDao {
 	 }
 	 
 	 public void insertVenue(Venues venue) {
-		 String insertQuery="insert into venue_details(venue_name,venue_address,venue_city,venue_type,venue_vendor_name,contact_number,venue_package)values(?,?,?,?,?,?,?)";
+		 String insertQuery="insert into venue_details(venue_name,venue_area,venue_city,venue_type,venue_vendor_name,contact_number,venue_package)values(?,?,?,?,?,?,?)";
 	      ConnectionUtil conUtil=new ConnectionUtil();
 	      Connection con=conUtil.getDbConnection();
 	      try {
 			PreparedStatement prstmt=con.prepareStatement(insertQuery);
 			prstmt.setString(1, venue.getVenueName());
-			prstmt.setString(2, venue.getVenueAddress());
+			prstmt.setString(2, venue.getVenueArea());
 			prstmt.setString(3, venue.getVenueCity());
 			prstmt.setString(4, venue.getVenueType());
 			prstmt.setString(5, venue.getVenueVendorName());
@@ -88,5 +88,79 @@ public class VenuesDao {
 				// TODO Auto-generated cat;
 				e.printStackTrace();
 			}
-}
+	 }
+ public int findVenueId(String venueName) {
+	 String findVenue="select venue_id from venue_details where venue_name='"+venueName+"'";
+	 Connection con=ConnectionUtil.getDbConnection();
+		int venueId=0;
+		Statement stmt;
+		try {
+			stmt = con.createStatement();
+			ResultSet rs=stmt.executeQuery(findVenue);
+			if(rs.next()) {
+				venueId=rs.getInt(1);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	 return venueId;
+	 
+ }
+ 
+ public  int findPackage(int venueId)
+	{
+		String query="select venue_package from venue_details where venue_id='"+venueId+"'";
+		
+		Connection con=ConnectionUtil.getDbConnection();
+		Statement stmt;
+		int venuePackage=0;
+		try {
+			stmt=con.createStatement();
+			
+			ResultSet rs=stmt.executeQuery(query);
+			
+			if(rs.next())
+			{
+				venuePackage=rs.getInt(1);
+			}
+			
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}		
+		
+		return venuePackage;
+		
+	}
+	
+ 
+ 
+ 
+ 
+// public Venues findVenues(int venueId) {
+//	 String findProduct="select * from venue_details where venue_id=?";
+//	 Connection con=ConnectionUtil.getDbConnection();
+//	 Venues venue=null;
+//	 try {
+//		PreparedStatement prstmt=con.prepareStatement(findProduct);
+//		prstmt.setInt(1, venueId);
+//		ResultSet rs=prstmt.executeQuery(findProduct);
+//		if(rs.next()) {
+//			Venues venues =new Venues(rs.getString(2),rs.getString(),rs.getString(venueId)); 
+//			
+//		}
+//	} catch (SQLException e) {
+//		// TODO Auto-generated catch block
+//		e.printStackTrace();
+//	}
+//	 
+//	return Venues;
+//	 
+// }
+
+ 
+	 
 }

@@ -139,23 +139,24 @@ public class UserDao {
 		return userList;
 		
 	 
-	 }public static int findUserId(String emailId)
+	 }public  int findUserId(String emailId)
 		{
 			String findUser="select User_id from user_details where email_id='"+emailId+"'";
 			Connection con=ConnectionUtil.getDbConnection();
-			int UserId=0;
+			int userId=0;
 			try {
 				Statement stmt = con.createStatement();
 				ResultSet rs=stmt.executeQuery(findUser);
 				if(rs.next())
 				{
-				UserId=rs.getInt(1);
+				userId=rs.getInt(1);
 				}
 				
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
-			return UserId;
+			return userId;
 	 
 }
+	
 }
