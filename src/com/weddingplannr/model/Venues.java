@@ -10,6 +10,7 @@ public class Venues {
 	private String venueVendorName;
 	private long contactNumber;
 	private double venuePackage;
+	private String availability;
 	public String getVenueName() {
 		return venueName;
 	}
@@ -52,8 +53,14 @@ public class Venues {
 	public void setVenuePackage(double venuePackage) {
 		this.venuePackage = venuePackage;
 	}
+	public String getAvailability() {
+		return availability;
+	}
+	public void setAvailability(String availability) {
+		this.availability = availability;
+	}
 	public Venues(String venueName, String venueArea, String venueCity, String venueType, String venueVendorName,
-			long contactNumber, double venuePackage) {
+			long contactNumber, double venuePackage, String availability) {
 		super();
 		this.venueName = venueName;
 		this.venueArea = venueArea;
@@ -62,6 +69,7 @@ public class Venues {
 		this.venueVendorName = venueVendorName;
 		this.contactNumber = contactNumber;
 		this.venuePackage = venuePackage;
+		this.availability = availability;
 	}
 	public Venues() {
 		super();
@@ -69,7 +77,8 @@ public class Venues {
 	}
 	@Override
 	public int hashCode() {
-		return Objects.hash(contactNumber, venueArea, venueCity, venueName, venuePackage, venueType, venueVendorName);
+		return Objects.hash(availability, contactNumber, venueArea, venueCity, venueName, venuePackage, venueType,
+				venueVendorName);
 	}
 	@Override
 	public boolean equals(Object obj) {
@@ -80,8 +89,9 @@ public class Venues {
 		if (getClass() != obj.getClass())
 			return false;
 		Venues other = (Venues) obj;
-		return contactNumber == other.contactNumber && Objects.equals(venueArea, other.venueArea)
-				&& Objects.equals(venueCity, other.venueCity) && Objects.equals(venueName, other.venueName)
+		return Objects.equals(availability, other.availability) && contactNumber == other.contactNumber
+				&& Objects.equals(venueArea, other.venueArea) && Objects.equals(venueCity, other.venueCity)
+				&& Objects.equals(venueName, other.venueName)
 				&& Double.doubleToLongBits(venuePackage) == Double.doubleToLongBits(other.venuePackage)
 				&& Objects.equals(venueType, other.venueType) && Objects.equals(venueVendorName, other.venueVendorName);
 	}
@@ -89,9 +99,10 @@ public class Venues {
 	public String toString() {
 		return "Venues [venueName=" + venueName + ", venueArea=" + venueArea + ", venueCity=" + venueCity
 				+ ", venueType=" + venueType + ", venueVendorName=" + venueVendorName + ", contactNumber="
-				+ contactNumber + ", venuePackage=" + venuePackage + "]";
+				+ contactNumber + ", venuePackage=" + venuePackage + ", availability=" + availability + "]";
 	}
-
+		
+	
 	
 	
 	

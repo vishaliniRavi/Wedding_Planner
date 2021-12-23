@@ -1,12 +1,17 @@
 package com.weddingplanner.test;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
 
+import com.weddingplanner.dao.BookingServicesDao;
 import com.weddingplanner.dao.BookingVenuesDao;
 import com.weddingplanner.dao.ServicesDao;
 import com.weddingplanner.dao.UserDao;
 import com.weddingplanner.dao.VenuesDao;
+import com.weddingplannr.model.BookingServices;
 import com.weddingplannr.model.BookingVenues;
 import com.weddingplannr.model.Services;
 import com.weddingplannr.model.User;
@@ -127,7 +132,8 @@ public class TestMain {
 				User validadmin = userDao.validateAdmin(emailId, password);
 				if (validadmin != null) { // admin login
 					System.out.println("Welcome admin");
-					System.out.println("\n1.view customers \n2.add venues\n3.Delete venue\n4.edit venue\n5.add services\n6.Remove services\nEnter your choice");
+					System.out.println(
+							"\n1.view customers \n2.add venues\n3.Delete venue\n4.edit venue\n5.add services\n6.Remove services\nEnter your choice");
 					int option = Integer.parseInt(sc.nextLine());
 					switch (option) {
 					case 1: // view customer
@@ -153,8 +159,10 @@ public class TestMain {
 						Long contactNumber = Long.parseLong(sc.nextLine());
 						System.out.println("Enter venue package");
 						Double venuePackage = Double.parseDouble(sc.nextLine());
+						System.out.println("Enter availability");
+						String availability=sc.nextLine();
 						Venues venue = new Venues(venueName, venueAddress, venueCity, venueType, venueVendorName,
-								contactNumber, venuePackage);
+								contactNumber, venuePackage,availability);
 						venuedao.insertVenue(venue);
 						break;
 					case 3: // delete venues
@@ -191,8 +199,8 @@ public class TestMain {
 						serviceDao.removeServices(serviceName);
 					}
 				} else if (valideUser != null) { // customer login
-					System.out.println("Welcome "+valideUser.getUserName());
-					System.out.println("\n1.view venue\n2.view Services\n3.Edit profile\n4.Book venues\n5.Book Services");
+					System.out.println("Welcome " + valideUser.getUserName());
+					System.out.println("\n1.view venue\n2.view Services\n3.Edit profile\n4.filter by cities\n5.filter by budgets\n6.Book venues\n7.Book Services");
 					flag = 1;
 					int userChoice = Integer.parseInt(sc.nextLine());
 					switch (userChoice) {
@@ -206,7 +214,7 @@ public class TestMain {
 					case 2: // view services
 						ServicesDao serviceDao = new ServicesDao();
 						List<Services> serviceList = serviceDao.showServices();
-						for (int i = 0; i < serviceList.size(); i++) {
+					for (int i = 0; i < serviceList.size(); i++) {
 							System.out.println(serviceList.get(i));
 						}
 						break;
@@ -276,38 +284,216 @@ public class TestMain {
 							System.out.println("invalid email");
 						break;
 					case 4:
-					    venuedao=new VenuesDao();
-					    emailId=valideUser.getEmailId();
-						int id1=userDao.findUserId(emailId);
-						System.out.println("user"+id1);
+	      				 venuedao = new VenuesDao();
+	      				 System.out.println("Enter city name");
+	      				 String venueCity=sc.nextLine();
+						 venuelist = venuedao.findCity(venueCity);
+						for (int i = 0; i < venuelist.size(); i++) {
+							System.out.println(venuelist.get(i));
+						}
+						break;
+					case 5:
+						System.out.println("\n1.Premium\n2.Luxury");
+						System.out.println("Enter your choice");
+						int budgetChoice=Integer.parseInt(sc.nextLine());
+						switch(budgetChoice) {
+						case 1:
+							venuedao=new VenuesDao();
+							venuelist=venuedao.findByBudget();
+							for (int i = 0; i < venuelist.size(); i++) {
+								System.out.println(venuelist.get(i));
+							}break;
+						case 2:
+							venuedao=new VenuesDao();
+							venuelist=venuedao.findLuxury();
+							for (int i = 0; i < venuelist.size(); i++) {
+								System.out.println(venuelist.get(i));
+							}break;
+						}break;
+					case 6:
+						venuedao = new VenuesDao();
+						emailId = valideUser.getEmailId();
+						int id1 = userDao.findUserId(emailId);
+						System.out.println("user" + id1);
 						System.out.println("view Produce List");
 						List<Venues> venueList = venuedao.showVenue();
 						for (int i = 0; i < venueList.size(); i++) {
 							System.out.println(venueList.get(i));
 						}
 						System.out.println("Enter venue name");
-						String venueName=sc.nextLine();
-						int id2=venuedao.findVenueId(venueName);
-						System.out.println("venue"+id2);
+						String venueName = sc.nextLine();
+						int id2 = venuedao.findVenueId(venueName);
+						System.out.println("venue" + id2);
 						System.out.println("Enter No of guest");
-						int noOfGuest=Integer.parseInt(sc.nextLine());
+						int noOfGuest = Integer.parseInt(sc.nextLine());
 						System.out.println("Enter function Timing Morning/Evening");
-						String functionTiming=sc.nextLine();
+						String functionTiming = sc.nextLine();
 						System.out.println("Enter Event Date");
-						String eventDate=sc.nextLine();
-						int price=venuedao.findPackage(id2);
-						System.out.println("package"+price);
-						System.out.println("");
+						SimpleDateFormat sdf=new SimpleDateFormat("DD-MM-YYYY");
+						Date eventDate=null;
+						try {
+							eventDate = sdf.parse(sc.nextLine());
+						} catch (ParseException e) {
+							e.printStackTrace();
+						}
+						int price = venuedao.findPackage(id2);
+						System.out.println("package" + price);
+						System.out.println("Advance amount You have to pay"+(price/2));
 //						System.out.println("Enter your Number of Products");
 //						int quantity=Integer.parseInt(scan.nextLine());
 //						
 //						double totalPrice=(double)(quantity*price);
-					     BookingVenues bookVenue=new BookingVenues(id1,id2,venueName,noOfGuest,functionTiming,eventDate,price);
-					     BookingVenuesDao bookingVenue=new BookingVenuesDao();
+						BookingVenues bookVenue = new BookingVenues(id1, id2, venueName, noOfGuest, functionTiming,
+								eventDate, price);
+						BookingVenuesDao bookingVenue = new BookingVenuesDao();
 						bookingVenue.bookVenue(bookVenue);
-						
-						
-						
+//					case 5:
+//						
+//							System.out.println("Do you want to book services?(Y/N)");
+//							char bookingChoice = sc.nextLine().charAt(0);
+//							ServicesDao servicedao = new ServicesDao();
+//							if (bookingChoice == 'Y' || bookingChoice == 'y') {
+//								List<Services> list = servicedao.showServices();
+//								for (int i = 0; i < list.size(); i++) {
+//									System.out.println(list.get(i));
+//								}
+//								emailId = valideUser.getEmailId();
+//								int userId = userDao.findUserId(emailId);
+//								System.out.println("user" + userId);
+//								System.out.println("Enter Service Name");
+//								String serviceName = sc.nextLine();
+//								int serviceId = servicedao.findServiceId(serviceName);
+//								System.out.println("service" + serviceId);
+//								System.out.println("Enter Event Date");
+//								String date = sc.nextLine();
+//								double servicePackage = servicedao.findPackage(serviceId);
+//								System.out.println("package" + servicePackage);
+//								BookingServices bookService = new BookingServices(userId, serviceId, serviceName, date,
+//										servicePackage);
+//								BookingServicesDao bookingService = new BookingServicesDao();
+//								bookingService.bookService(bookService);
+//							}
+					
+					case 7:
+						System.out.println("Do you want book Services");
+						char bookingChoice = sc.nextLine().charAt(0);
+ 		      			
+ 		      			if (bookingChoice == 'Y' || bookingChoice == 'y')
+ 		      			{
+ 		      				System.out.println("1.photographer\n2.Mehandi\n3.Bridal makeup\n4.Decoration");
+ 		      				System.out.println("Enter your choice");
+ 		      				int serviceChoice = Integer.parseInt(sc.nextLine());
+ 		      				switch(serviceChoice) {
+ 		      				case 1:
+ 		      					System.out.println("Do you want book photographer");
+ 		      					bookingChoice = sc.nextLine().charAt(0);
+ 		      					ServicesDao servicedao = new ServicesDao();
+ 		      					if (bookingChoice == 'Y' || bookingChoice == 'y') {
+ 		      						emailId = valideUser.getEmailId();
+ 									int userId = userDao.findUserId(emailId);
+ 									System.out.println("user" + userId);
+ 									System.out.println("Enter Service Name");
+ 									String serviceName = sc.nextLine();
+ 									int serviceId = servicedao.findServiceId(serviceName);
+ 									System.out.println("service" + serviceId);
+ 									System.out.println("Enter Event Date");
+ 									String date = sc.nextLine();
+ 									double servicePackage = servicedao.findPackage(serviceId);
+ 									System.out.println("package" + servicePackage);
+ 									BookingServices bookService = new BookingServices(userId, serviceId, serviceName, date,
+ 											servicePackage);
+ 									BookingServicesDao bookingService = new BookingServicesDao();
+ 									bookingService.bookService(bookService);	
+ 		      					}
+ 		      			  case 2:
+ 		      				  System.out.println("Do you want book Mehandi");
+ 		      				bookingChoice = sc.nextLine().charAt(0);
+		      				  servicedao = new ServicesDao();
+		      					if (bookingChoice == 'Y' || bookingChoice == 'y') {
+		      						emailId = valideUser.getEmailId();
+									int userId = userDao.findUserId(emailId);
+									System.out.println("user" + userId);
+									System.out.println("Enter Service Name");
+									String serviceName = sc.nextLine();
+									int serviceId = servicedao.findServiceId(serviceName);
+									System.out.println("service" + serviceId);
+									System.out.println("Enter Event Date");
+									String date = sc.nextLine();
+									double servicePackage = servicedao.findPackage(serviceId);
+									System.out.println("package" + servicePackage);
+									BookingServices bookService = new BookingServices(userId, serviceId, serviceName, date,
+											servicePackage);
+									BookingServicesDao bookingService = new BookingServicesDao();
+									bookingService.bookService(bookService);	
+		      					}
+ 		      			  case 3:
+ 		      				  System.out.println("Do yu want book Bridal Makeup");
+ 		      				bookingChoice = sc.nextLine().charAt(0);
+		      				  servicedao = new ServicesDao();
+		      					if (bookingChoice == 'Y' || bookingChoice == 'y') {
+		      						emailId = valideUser.getEmailId();
+									int userId = userDao.findUserId(emailId);
+									System.out.println("user" + userId);
+									System.out.println("Enter Service Name");
+									String serviceName = sc.nextLine();
+									int serviceId = servicedao.findServiceId(serviceName);
+									System.out.println("service" + serviceId);
+									System.out.println("Enter Event Date");
+									String date = sc.nextLine();
+									double servicePackage = servicedao.findPackage(serviceId);
+									System.out.println("package" + servicePackage);
+									BookingServices bookService = new BookingServices(userId, serviceId, serviceName, date,
+											servicePackage);
+									BookingServicesDao bookingService = new BookingServicesDao();
+									bookingService.bookService(bookService);	
+		      					}
+ 		      			  case 4:
+ 		      				  System.out.println("Do you want book Decoration");
+ 		      				bookingChoice = sc.nextLine().charAt(0);
+		      				 servicedao = new ServicesDao();
+		      					if (bookingChoice == 'Y' || bookingChoice == 'y') {
+		      						emailId = valideUser.getEmailId();
+									int userId = userDao.findUserId(emailId);
+									System.out.println("user" + userId);
+									System.out.println("Enter Service Name");
+									String serviceName = sc.nextLine();
+									int serviceId = servicedao.findServiceId(serviceName);
+									System.out.println("service" + serviceId);
+									System.out.println("Enter Event Date");
+									String date = sc.nextLine();
+									double servicePackage = servicedao.findPackage(serviceId);
+									System.out.println("package" + servicePackage);
+									BookingServices bookService = new BookingServices(userId, serviceId, serviceName, date,
+											servicePackage);
+									BookingServicesDao bookingService = new BookingServicesDao();
+									bookingService.bookService(bookService);
+									
+		      					}
+		      					BookingServicesDao bookingService=new BookingServicesDao();
+		      					emailId = valideUser.getEmailId();
+								 int userId = userDao.findUserId(emailId);
+								double totalpackage=bookingService.totalPackage(userId);
+								System.out.println("Total package:"+totalpackage);
+								System.out.println("Advance amount you have to pay:"+(totalpackage/4));
+ 		      			  
+ 		      				}
+ 		      			}
+//						if (bookingChoice == 'Y' || bookingChoice == 'y') {
+//							System.out.println("Do you want photographer(Y/N)");
+//							bookingChoice = sc.nextLine().charAt(0);
+//							if (bookingChoice == 'Y' || bookingChoice == 'y') {
+//								System.out.println("Choose the services you want!");
+//								int serviceChoice = Integer.parseInt(sc.nextLine());
+//								switch (serviceChoice) {
+//								case 1:
+//									emailId = valideUser.getEmailId();
+//									id1 = userDao.findUserId(emailId);
+//									System.out.println("user" + id1);
+//									String serviceName = "Photographer";
+//									System.out.println("Photographer booked");
+//								}BookingServices bookService = new BookingServices()
+//							}
+
 //					case 4:
 //						userDao = new UserDao();
 //						System.out.println("Enter email id : ");
@@ -340,17 +526,14 @@ public class TestMain {
 //						BookingVenues bookvenue=new BookingVenues(userId,venueId,venueName,noOfGuest,functionTiming,eventDate,venuePackage);
 //				     bookVenue.bookVenue(bookvenue);
 					}
-					}
-				
+				}
 
 				else
 					System.out.println("invalid email and password");
 
 			} while (flag == 0);
 
-		
+		}
 
-			}
-
-		}	
+	}
 }

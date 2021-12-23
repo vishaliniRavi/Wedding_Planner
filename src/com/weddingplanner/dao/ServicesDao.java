@@ -61,10 +61,52 @@ public class ServicesDao {
 				e.printStackTrace();
 			}
 		 }
+	 
+	 
+	 public int findServiceId(String serviceName) {
+		 String findVenue="select service_id from service_details where service_name='"+serviceName+"'";
+		 Connection con=ConnectionUtil.getDbConnection();
+			int serviceId=0;
+			Statement stmt;
+			try {
+				stmt = con.createStatement();
+				ResultSet rs=stmt.executeQuery(findVenue);
+				if(rs.next()) {
+					serviceId=rs.getInt(1);
+				}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+		 return serviceId;
 	
-	
-	
-	
-	
+	}
+	 public  double findPackage(int serviceId)
+		{
+			String query="select service_package from service_details where service_id='"+serviceId+"'";
+			
+			Connection con=ConnectionUtil.getDbConnection();
+			Statement stmt;
+			double servicePackage=0;
+			try {
+				stmt=con.createStatement();
+				
+				ResultSet rs=stmt.executeQuery(query);
+				
+				if(rs.next())
+				{
+					servicePackage=rs.getDouble(1);
+				}
+				
+				
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}		
+			
+			return servicePackage;
+			
+		}
 
 }

@@ -48,10 +48,10 @@ public class BookingVenuesDao {
 		prstmt.setString(3, bookVenues.getVenueName());
 		prstmt.setInt(4, bookVenues.getNoOfGuest());
 		prstmt.setString(5, bookVenues.getFunctionTiming());
-		prstmt.setString(6, bookVenues.getEventDate());
+		prstmt.setDate(6, new java.sql.Date(bookVenues.getEventDate().getTime()));
 		prstmt.setDouble(7,bookVenues.getVenuePackage());
 		prstmt.executeUpdate();
-		System.out.println("Value inserted Successfully");
+		System.out.println("Your venue Successfully booked");
 	} catch (SQLException e) {
 		// TODO Auto-generated catch block
 		e.printStackTrace();

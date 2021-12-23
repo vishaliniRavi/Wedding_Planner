@@ -1,5 +1,6 @@
 package com.weddingplannr.model;
 
+import java.util.Date;
 import java.util.Objects;
 
 public class BookingVenues {
@@ -9,7 +10,7 @@ public class BookingVenues {
 	private String venueName;
 	private int noOfGuest;
 	private String functionTiming;
-	private String  eventDate;
+	private Date eventDate;
 	private double venuePackage;
 	public int getUser_id() {
 		return user_id;
@@ -41,10 +42,10 @@ public class BookingVenues {
 	public void setFunctionTiming(String functionTiming) {
 		this.functionTiming = functionTiming;
 	}
-	public String getEventDate() {
+	public Date getEventDate() {
 		return eventDate;
 	}
-	public void setEventDate(String eventDate) {
+	public void setEventDate(Date eventDate) {
 		this.eventDate = eventDate;
 	}
 	public double getVenuePackage() {
@@ -54,7 +55,7 @@ public class BookingVenues {
 		this.venuePackage = venuePackage;
 	}
 	public BookingVenues(int user_id, int venue_id, String venueName, int noOfGuest, String functionTiming,
-			String eventDate, double venuePackage) {
+			Date eventDate, double venuePackage) {
 		super();
 		this.user_id = user_id;
 		this.venue_id = venue_id;
@@ -93,6 +94,7 @@ public class BookingVenues {
 				+ ", noOfGuest=" + noOfGuest + ", functionTiming=" + functionTiming + ", eventDate=" + eventDate
 				+ ", venuePackage=" + venuePackage + "]";
 	}
+	
 	
 	
 	

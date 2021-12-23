@@ -23,7 +23,7 @@ public class VenuesDao {
 			Statement stmt=con.createStatement();
 			ResultSet rs=stmt.executeQuery(showQuery);
 			while(rs.next()) {
-				Venues venue=new Venues(rs.getString(2),rs.getString(3),rs.getString(4),rs.getString(5),rs.getString(6),rs.getLong(7),rs.getDouble(8));
+				Venues venue=new Venues(rs.getString(2),rs.getString(3),rs.getString(4),rs.getString(5),rs.getString(6),rs.getLong(7),rs.getDouble(8),rs.getString(9));
 				venuelist.add(venue);
 				
 			}
@@ -36,7 +36,7 @@ public class VenuesDao {
 	 }
 	 
 	 public void insertVenue(Venues venue) {
-		 String insertQuery="insert into venue_details(venue_name,venue_area,venue_city,venue_type,venue_vendor_name,contact_number,venue_package)values(?,?,?,?,?,?,?)";
+		 String insertQuery="insert into venue_details(venue_name,venue_area,venue_city,venue_type,venue_vendor_name,contact_number,venue_package,check_availability)values(?,?,?,?,?,?,?,?)";
 	      ConnectionUtil conUtil=new ConnectionUtil();
 	      Connection con=conUtil.getDbConnection();
 	      try {
@@ -48,6 +48,7 @@ public class VenuesDao {
 			prstmt.setString(5, venue.getVenueVendorName());
 			prstmt.setLong(6, venue.getContactNumber());
 			prstmt.setDouble(7, venue.getVenuePackage());
+			prstmt.setString(8, venue.getAvailability());
 			prstmt.executeUpdate();
 			System.out.println("venues successfully added");
 		} catch (SQLException e) {
@@ -136,10 +137,73 @@ public class VenuesDao {
 		
 	}
 	
+ public List<Venues> findCity(String venueCity) {
+	 List<Venues> venuelist=new ArrayList<Venues>();
+	 String query="select * from venue_details where venue_city='"+venueCity+"'";
+	 Connection con=ConnectionUtil.getDbConnection();
+ 	Venues venue=null;
+ 	try {
+			Statement stmt =con.createStatement();
+			ResultSet rs=stmt.executeQuery(query);
+			while(rs.next()) {
+			 venue=new Venues(rs.getString(2),rs.getString(3),venueCity,rs.getString(5),rs.getString(6),rs.getLong(7),rs.getDouble(8),rs.getString(9));
+			venuelist.add(venue);
+			}
+//			else {
+//				System.out.println("not a valid user");
+//			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+ 	
+		return venuelist ;
+ }
+ public List<Venues> findByBudget(){
+	 List<Venues> venuelist=new ArrayList<Venues>();
+	 String query="select * from venue_details where venue_package<150000";
+	 Connection con=ConnectionUtil.getDbConnection();
+ 	 Venues venue=null;
+ 	try {
+			Statement stmt =con.createStatement();
+			ResultSet rs=stmt.executeQuery(query);
+			while(rs.next()) {
+			 venue=new Venues(rs.getString(2),rs.getString(3),rs.getString(4),rs.getString(5),rs.getString(6),rs.getLong(7),rs.getDouble(8),rs.getString(9));
+			venuelist.add(venue);
+			}
+//			else {
+//				System.out.println("not a valid user");
+//			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+ 	
+		return venuelist ;
+ }
  
- 
- 
- 
+ public List<Venues> findLuxury(){
+	 List<Venues> venuelist=new ArrayList<Venues>();
+	 String query="select * from venue_details where venue_package>150000";
+	 Connection con=ConnectionUtil.getDbConnection();
+ 	 Venues venue=null;
+ 	try {
+			Statement stmt =con.createStatement();
+			ResultSet rs=stmt.executeQuery(query);
+			while(rs.next()) {
+			 venue=new Venues(rs.getString(2),rs.getString(3),rs.getString(4),rs.getString(5),rs.getString(6),rs.getLong(7),rs.getDouble(8),rs.getString(9));
+			venuelist.add(venue);
+			}
+//			else {
+//				System.out.println("not a valid user");
+//			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+ 	
+		return venuelist ;
+ }
 // public Venues findVenues(int venueId) {
 //	 String findProduct="select * from venue_details where venue_id=?";
 //	 Connection con=ConnectionUtil.getDbConnection();

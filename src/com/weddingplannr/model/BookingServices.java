@@ -8,7 +8,7 @@ public class BookingServices {
 	  private int serviceId;
 	  private String serviceName;
 	  private String eventDate;
-	  private Double servicePackage;
+	  private double servicePackage;
 	public int getUserId() {
 		return userId;
 	}
