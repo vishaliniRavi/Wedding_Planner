@@ -97,9 +97,9 @@ public class Venues {
 	}
 	@Override
 	public String toString() {
-		return "Venues [venueName=" + venueName + ", venueArea=" + venueArea + ", venueCity=" + venueCity
-				+ ", venueType=" + venueType + ", venueVendorName=" + venueVendorName + ", contactNumber="
-				+ contactNumber + ", venuePackage=" + venuePackage + ", availability=" + availability + "]";
+		return "venueName:" + venueName + "\nvenueArea:" + venueArea + "\nvenueCity:" + venueCity
+				+ "\nvenueType:" + venueType + "\nvenueVendorName:" + venueVendorName + "\ncontactNumber:"
+				+ contactNumber + "\nvenuePackage:" + venuePackage + "\navailability:" + availability + "\n";
 	}
 		
 	

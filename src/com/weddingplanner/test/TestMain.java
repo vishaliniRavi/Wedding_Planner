@@ -314,7 +314,6 @@ public class TestMain {
 						venuedao = new VenuesDao();
 						emailId = valideUser.getEmailId();
 						int id1 = userDao.findUserId(emailId);
-						System.out.println("user" + id1);
 						System.out.println("view Produce List");
 						List<Venues> venueList = venuedao.showVenue();
 						for (int i = 0; i < venueList.size(); i++) {
@@ -323,7 +322,6 @@ public class TestMain {
 						System.out.println("Enter venue name");
 						String venueName = sc.nextLine();
 						int id2 = venuedao.findVenueId(venueName);
-						System.out.println("venue" + id2);
 						System.out.println("Enter No of guest");
 						int noOfGuest = Integer.parseInt(sc.nextLine());
 						System.out.println("Enter function Timing Morning/Evening");
@@ -385,7 +383,7 @@ public class TestMain {
  		      				int serviceChoice = Integer.parseInt(sc.nextLine());
  		      				switch(serviceChoice) {
  		      				case 1:
- 		      					System.out.println("Do you want book photographer");
+ 		      					System.out.println("Do you want book photography");
  		      					bookingChoice = sc.nextLine().charAt(0);
  		      					ServicesDao servicedao = new ServicesDao();
  		      					if (bookingChoice == 'Y' || bookingChoice == 'y') {
