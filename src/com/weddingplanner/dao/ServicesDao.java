@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.weddingplannr.model.Services;
+import com.weddingplannr.model.User;
 
 public class ServicesDao {
 	public List<Services> showServices(){
@@ -63,8 +64,8 @@ public class ServicesDao {
 		 }
 	 
 	 
-	 public int findServiceId(String serviceName) {
-		 String findVenue="select service_id from service_details where service_name='"+serviceName+"'";
+	 public int findServiceId() {
+		 String findVenue="select service_id from service_details where service_name='photography'";
 		 Connection con=ConnectionUtil.getDbConnection();
 			int serviceId=0;
 			Statement stmt;
@@ -108,5 +109,76 @@ public class ServicesDao {
 			return servicePackage;
 			
 		}
-
+	 public int findMehandiId() {
+		 String findVenue="select service_id from service_details where service_name='Mehandi'";
+		 Connection con=ConnectionUtil.getDbConnection();
+			int serviceId=0;
+			Statement stmt;
+			try {
+				stmt = con.createStatement();
+				ResultSet rs=stmt.executeQuery(findVenue);
+				if(rs.next()) {
+					serviceId=rs.getInt(1);
+				}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+		 return serviceId;
+	
+	}
+	 public int findMakeupId() {
+		 String findVenue="select service_id from service_details where service_name='Bridal Makeup'";
+		 Connection con=ConnectionUtil.getDbConnection();
+			int serviceId=0;
+			Statement stmt;
+			try {
+				stmt = con.createStatement();
+				ResultSet rs=stmt.executeQuery(findVenue);
+				if(rs.next()) {
+					serviceId=rs.getInt(1);
+				}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+		 return serviceId;
+	
+	}
+	 public int findDecorationId() {
+		 String findVenue="select service_id from service_details where service_name='Decoration'";
+		 Connection con=ConnectionUtil.getDbConnection();
+			int serviceId=0;
+			Statement stmt;
+			try {
+				stmt = con.createStatement();
+				ResultSet rs=stmt.executeQuery(findVenue);
+				if(rs.next()) {
+					serviceId=rs.getInt(1);
+				}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+		 return serviceId;
+	
+	}
+	 public int updateRatingProfile(int ratings) {
+			String updateQuery="update service_details set ratings=?";
+			Connection con=ConnectionUtil.getDbConnection();
+			PreparedStatement prstmt=null;
+			try {
+				prstmt=con.prepareStatement(updateQuery);
+                prstmt.setInt(1, ratings);
+				System.out.println("profile edited successfully");
+			} catch (SQLException e) {
+				// TODO Auto-generated cat;
+				e.printStackTrace();
+			}
+		 return ratings;
+		} 
+	 
 }

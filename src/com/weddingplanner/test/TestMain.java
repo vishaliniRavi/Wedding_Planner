@@ -8,11 +8,13 @@ import java.util.Scanner;
 
 import com.weddingplanner.dao.BookingServicesDao;
 import com.weddingplanner.dao.BookingVenuesDao;
+import com.weddingplanner.dao.RatingsDao;
 import com.weddingplanner.dao.ServicesDao;
 import com.weddingplanner.dao.UserDao;
 import com.weddingplanner.dao.VenuesDao;
 import com.weddingplannr.model.BookingServices;
 import com.weddingplannr.model.BookingVenues;
+import com.weddingplannr.model.Ratings;
 import com.weddingplannr.model.Services;
 import com.weddingplannr.model.User;
 import com.weddingplannr.model.Venues;
@@ -200,7 +202,7 @@ public class TestMain {
 					}
 				} else if (valideUser != null) { // customer login
 					System.out.println("Welcome " + valideUser.getUserName());
-					System.out.println("\n1.view venue\n2.view Services\n3.Edit profile\n4.filter by cities\n5.filter by budgets\n6.Book venues\n7.Book Services");
+					System.out.println("\n1.view venue\n2.view Services\n3.Edit profile\n4.filter by cities\n5.filter by budgets\n6.Book venues\n7.Book Services\n8.Give ratings\n9.view ratings");
 					flag = 1;
 					int userChoice = Integer.parseInt(sc.nextLine());
 					switch (userChoice) {
@@ -336,15 +338,53 @@ public class TestMain {
 						}
 						int price = venuedao.findPackage(id2);
 						System.out.println("package" + price);
-						System.out.println("Advance amount You have to pay"+(price/2));
+						int advanceAmount=(price)/2;
+						System.out.println("Advance amount You have to pay"+advanceAmount);
 //						System.out.println("Enter your Number of Products");
 //						int quantity=Integer.parseInt(scan.nextLine());
 //						
 //						double totalPrice=(double)(quantity*price);
-						BookingVenues bookVenue = new BookingVenues(id1, id2, venueName, noOfGuest, functionTiming,
-								eventDate, price);
-						BookingVenuesDao bookingVenue = new BookingVenuesDao();
-						bookingVenue.bookVenue(bookVenue);
+						
+						int walletbal=0;
+						try {
+							walletbal = userDao.walletbal(id1);
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						int dedwallbal = (int) (walletbal - advanceAmount);
+							System.out.println("\n 1.confirm order \n 2.cancel order");
+							int orderConfirmation = sc.nextInt();
+							sc.nextLine();
+							switch (orderConfirmation) 
+							{
+							case 1:
+								if (advanceAmount <= walletbal) {
+									int upd=0;
+									try {
+										upd = userDao.updatewallet(dedwallbal, id1);
+									} catch (Exception e) {
+										// TODO Auto-generated catch block
+										e.printStackTrace();
+									}
+									if(upd > 0) {
+										BookingVenues bookVenue = new BookingVenues(id1, id2, venueName, noOfGuest, functionTiming,
+												eventDate, price);
+										BookingVenuesDao bookingVenue = new BookingVenuesDao();
+										bookingVenue.bookVenue(bookVenue);
+									System.out.println("order placed successfully!!!");
+									}else {
+										System.out.println("something went wrong try again!!");
+									}
+								} else {
+									System.out.println("Low Balance please top up!!");
+								}
+								flag = 0;
+								break;
+							case 2:
+								System.out.println("Order Cancelled");
+								break;
+							}
 //					case 5:
 //						
 //							System.out.println("Do you want to book services?(Y/N)");
@@ -391,8 +431,8 @@ public class TestMain {
  									int userId = userDao.findUserId(emailId);
  									System.out.println("user" + userId);
  									System.out.println("Enter Service Name");
- 									String serviceName = sc.nextLine();
- 									int serviceId = servicedao.findServiceId(serviceName);
+ 									String serviceName = "photography";
+ 									int serviceId = servicedao.findServiceId();
  									System.out.println("service" + serviceId);
  									System.out.println("Enter Event Date");
  									String date = sc.nextLine();
@@ -401,7 +441,54 @@ public class TestMain {
  									BookingServices bookService = new BookingServices(userId, serviceId, serviceName, date,
  											servicePackage);
  									BookingServicesDao bookingService = new BookingServicesDao();
- 									bookingService.bookService(bookService);	
+ 									bookingService.bookService(bookService);
+ 									emailId = valideUser.getEmailId();
+			      					userId = userDao.findUserId(emailId);
+									double totalpackage=bookingService.totalPackage(userId);
+									System.out.println("Total package:"+totalpackage);
+									int advance=(int) (totalpackage/4);
+									System.out.println(advance);
+									walletbal=0;
+									try {
+										walletbal = userDao.walletbal(userId);
+									} catch (Exception e) {
+										// TODO Auto-generated catch block
+										e.printStackTrace();
+									}
+									 dedwallbal = (int) (walletbal - advance);
+										System.out.println("\n 1.confirm order \n 2.cancel order");
+										 orderConfirmation = sc.nextInt();
+										sc.nextLine();
+										switch (orderConfirmation) 
+										{
+										case 1:
+											if (advance <= walletbal) {
+												int upd=0;
+												try {
+													upd = userDao.updatewallet(dedwallbal, userId);
+												} catch (Exception e) {
+													// TODO Auto-generated catch block
+													e.printStackTrace();
+												}
+												if(upd > 0) {
+													 bookService = new BookingServices(userId, serviceId, serviceName, date,
+															servicePackage);
+													BookingServicesDao bookservice = new BookingServicesDao();
+													bookservice.bookService(bookService);
+												System.out.println("order placed successfully!!!");
+												}else {
+													System.out.println("something went wrong try again!!");
+												}
+											} else {
+												System.out.println("Low Balance please top up!!");
+											}
+											flag = 0;
+											break;
+										case 2:
+											System.out.println("Order Cancelled");
+											break;
+
+										}	
  		      					}
  		      			  case 2:
  		      				  System.out.println("Do you want book Mehandi");
@@ -412,8 +499,8 @@ public class TestMain {
 									int userId = userDao.findUserId(emailId);
 									System.out.println("user" + userId);
 									System.out.println("Enter Service Name");
-									String serviceName = sc.nextLine();
-									int serviceId = servicedao.findServiceId(serviceName);
+									String serviceName="Mehadi";
+									int serviceId = servicedao.findMehandiId();
 									System.out.println("service" + serviceId);
 									System.out.println("Enter Event Date");
 									String date = sc.nextLine();
@@ -422,7 +509,54 @@ public class TestMain {
 									BookingServices bookService = new BookingServices(userId, serviceId, serviceName, date,
 											servicePackage);
 									BookingServicesDao bookingService = new BookingServicesDao();
-									bookingService.bookService(bookService);	
+									bookingService.bookService(bookService);
+									emailId = valideUser.getEmailId();
+			      					userId = userDao.findUserId(emailId);
+									double totalpackage=bookingService.totalPackage(userId);
+									System.out.println("Total package:"+totalpackage);
+									int advance=(int) (totalpackage/4);
+									System.out.println(advance);
+									walletbal=0;
+									try {
+										walletbal = userDao.walletbal(userId);
+									} catch (Exception e) {
+										// TODO Auto-generated catch block
+										e.printStackTrace();
+									}
+									 dedwallbal = (int) (walletbal - advance);
+										System.out.println("\n 1.confirm order \n 2.cancel order");
+										 orderConfirmation = sc.nextInt();
+										sc.nextLine();
+										switch (orderConfirmation) 
+										{
+										case 1:
+											if (advance <= walletbal) {
+												int upd=0;
+												try {
+													upd = userDao.updatewallet(dedwallbal, userId);
+												} catch (Exception e) {
+													// TODO Auto-generated catch block
+													e.printStackTrace();
+												}
+												if(upd > 0) {
+													 bookService = new BookingServices(userId, serviceId, serviceName, date,
+															servicePackage);
+													BookingServicesDao bookservice = new BookingServicesDao();
+													bookservice.bookService(bookService);
+												System.out.println("order placed successfully!!!");
+												}else {
+													System.out.println("something went wrong try again!!");
+												}
+											} else {
+												System.out.println("Low Balance please top up!!");
+											}
+											flag = 0;
+											break;
+										case 2:
+											System.out.println("Order Cancelled");
+											break;
+
+										}	
 		      					}
  		      			  case 3:
  		      				  System.out.println("Do yu want book Bridal Makeup");
@@ -433,8 +567,8 @@ public class TestMain {
 									int userId = userDao.findUserId(emailId);
 									System.out.println("user" + userId);
 									System.out.println("Enter Service Name");
-									String serviceName = sc.nextLine();
-									int serviceId = servicedao.findServiceId(serviceName);
+									String serviceName = "Bridal Makeup";
+									int serviceId = servicedao.findMakeupId();
 									System.out.println("service" + serviceId);
 									System.out.println("Enter Event Date");
 									String date = sc.nextLine();
@@ -443,7 +577,54 @@ public class TestMain {
 									BookingServices bookService = new BookingServices(userId, serviceId, serviceName, date,
 											servicePackage);
 									BookingServicesDao bookingService = new BookingServicesDao();
-									bookingService.bookService(bookService);	
+									bookingService.bookService(bookService);
+			      					emailId = valideUser.getEmailId();
+			      					userId = userDao.findUserId(emailId);
+									double totalpackage=bookingService.totalPackage(userId);
+									System.out.println("Total package:"+totalpackage);
+									int advance=(int) (totalpackage/4);
+									System.out.println(advance);
+									walletbal=0;
+									try {
+										walletbal = userDao.walletbal(userId);
+									} catch (Exception e) {
+										// TODO Auto-generated catch block
+										e.printStackTrace();
+									}
+									 dedwallbal = (int) (walletbal - advance);
+										System.out.println("\n 1.confirm order \n 2.cancel order");
+										 orderConfirmation = sc.nextInt();
+										sc.nextLine();
+										switch (orderConfirmation) 
+										{
+										case 1:
+											if (advance <= walletbal) {
+												int upd=0;
+												try {
+													upd = userDao.updatewallet(dedwallbal, userId);
+												} catch (Exception e) {
+													// TODO Auto-generated catch block
+													e.printStackTrace();
+												}
+												if(upd > 0) {
+													 bookService = new BookingServices(userId, serviceId, serviceName, date,
+															servicePackage);
+													BookingServicesDao bookservice = new BookingServicesDao();
+													bookservice.bookService(bookService);
+												System.out.println("order placed successfully!!!");
+												}else {
+													System.out.println("something went wrong try again!!");
+												}
+											} else {
+												System.out.println("Low Balance please top up!!");
+											}
+											flag = 0;
+											break;
+										case 2:
+											System.out.println("Order Cancelled");
+											break;
+
+										}	
 		      					}
  		      			  case 4:
  		      				  System.out.println("Do you want book Decoration");
@@ -454,8 +635,8 @@ public class TestMain {
 									int userId = userDao.findUserId(emailId);
 									System.out.println("user" + userId);
 									System.out.println("Enter Service Name");
-									String serviceName = sc.nextLine();
-									int serviceId = servicedao.findServiceId(serviceName);
+									String serviceName = "Decoration";
+									int serviceId = servicedao.findDecorationId();
 									System.out.println("service" + serviceId);
 									System.out.println("Enter Event Date");
 									String date = sc.nextLine();
@@ -465,17 +646,75 @@ public class TestMain {
 											servicePackage);
 									BookingServicesDao bookingService = new BookingServicesDao();
 									bookingService.bookService(bookService);
-									
+			      					emailId = valideUser.getEmailId();
+									 userId = userDao.findUserId(emailId);
+									double totalpackage=bookingService.totalPackage(userId);
+									System.out.println("Total package:"+totalpackage);
+									int advance=(int) (totalpackage/4);
+									System.out.println(advance);
+									 walletbal=0;
+									try {
+										walletbal = userDao.walletbal(userId);
+									} catch (Exception e) {
+										// TODO Auto-generated catch block
+										e.printStackTrace();
+									}
+									 dedwallbal = (int) (walletbal - advance);
+										System.out.println("\n 1.confirm order \n 2.cancel order");
+										 orderConfirmation = sc.nextInt();
+										sc.nextLine();
+										switch (orderConfirmation) 
+										{
+										case 1:
+											if (advance <= walletbal) {
+												int upd=0;
+												try {
+													upd = userDao.updatewallet(dedwallbal, userId);
+												} catch (Exception e) {
+													// TODO Auto-generated catch block
+													e.printStackTrace();
+												}
+												if(upd > 0) {
+													 bookService = new BookingServices(userId, serviceId, serviceName, date,
+															servicePackage);
+													BookingServicesDao bookservice = new BookingServicesDao();
+													bookservice.bookService(bookService);
+												System.out.println("order placed successfully!!!");
+												}else {
+													System.out.println("something went wrong try again!!");
+												}
+											} else {
+												System.out.println("Low Balance please top up!!");
+											}
+											flag = 0;
+											break;
+										case 2:
+											System.out.println("Order Cancelled");
+											break;
+										}
 		      					}
-		      					BookingServicesDao bookingService=new BookingServicesDao();
-		      					emailId = valideUser.getEmailId();
-								 int userId = userDao.findUserId(emailId);
-								double totalpackage=bookingService.totalPackage(userId);
-								System.out.println("Total package:"+totalpackage);
-								System.out.println("Advance amount you have to pay:"+(totalpackage/4));
- 		      			  
+		      					
  		      				}
  		      			}
+ 		      			case 8:
+ 		      				RatingsDao ratings = new RatingsDao();
+ 		      				emailId = valideUser.getEmailId();
+							int userId = userDao.findUserId(emailId);
+ 							System.out.println("Enter Service name");
+ 							String serviceName = sc.nextLine();
+ 							System.out.println("Give rating");
+ 							int rating = Integer.parseInt(sc.nextLine());
+ 							Ratings rate = new Ratings(userId, serviceName,rating);
+ 							ratings.insertRating(rate);
+ 							break;
+ 		      			case 9:
+ 		      				ratings = new RatingsDao();
+ 		      	             List<Ratings> ratingList=ratings.rating();
+ 							for (int i = 0; i < ratingList.size(); i++) {
+ 								System.out.println(ratingList.get(i));
+ 							}
+ 							break;
+ 						
 //						if (bookingChoice == 'Y' || bookingChoice == 'y') {
 //							System.out.println("Do you want photographer(Y/N)");
 //							bookingChoice = sc.nextLine().charAt(0);
@@ -524,6 +763,7 @@ public class TestMain {
 //						BookingVenues bookvenue=new BookingVenues(userId,venueId,venueName,noOfGuest,functionTiming,eventDate,venuePackage);
 //				     bookVenue.bookVenue(bookvenue);
 					}
+					
 				}
 
 				else

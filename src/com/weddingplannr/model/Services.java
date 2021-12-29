@@ -24,7 +24,7 @@ public class Services {
 	}
 	public Services() {
 		super();
-		
+		// TODO Auto-generated constructor stub
 	}
 	@Override
 	public int hashCode() {
@@ -44,12 +44,8 @@ public class Services {
 	}
 	@Override
 	public String toString() {
-		return "serviceName:" + serviceName + "\nservicePackage:" + servicePackage + "";
+		return "Services [serviceName=" + serviceName + ", servicePackage=" + servicePackage + "]";
 	}
-	
-	
-	
-	
 	
 	
 
